@@ -1,21 +1,20 @@
 #[macro_use] extern crate rocket;
 
-use std::fs;
+use std::process::exit;
 use rocket::response::content::RawHtml;
+use rocket::{Build, Rocket};
 
 #[get("/<name>")]
-fn hello<'r>(name: &str) -> Option<RawHtml<String>> {
-    if name == "Main.html" {
-        let path = "./src/Main_Page.html";
-        Some(RawHtml(fs::read_to_string(path).unwrap()))
-    }
-    else {
-        Some(RawHtml(String::new()))
+fn wiki<'r>(name: &str) -> wikify::wikify::Page {
+    if name == "shut" {
+        exit(0);
+    } else {
+        wikify::wikify::Page::new(String::from(name))
     }
 }
 
 #[launch]
-fn rocket() -> _ {
+fn rocket() -> Rocket<Build>{
     rocket::build()
-        .mount("/", routes![hello])
+        .mount("/wiki", routes![wiki])
 }
