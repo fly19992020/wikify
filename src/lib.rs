@@ -1,6 +1,16 @@
 use rocket::http::ContentType;
-use rocket::{response, Request, Response};
+use rocket::{get, response, Request, Response};
 use std::io::Cursor;
+use std::process::exit;
+
+#[get("/<name>")]
+pub fn wiki<'r>(name: &str) -> WikiPage {
+    if name == "shut" {
+        exit(0);
+    } else {
+        WikiPage::new(String::from(name))
+    }
+}
 
 pub struct WikiPage {
     namespace: String,
@@ -37,8 +47,4 @@ impl WikiPage {
         }
         Ok(std::fs::read_to_string(file_name).unwrap())
     }
-}
-
-trait SpecialPageResponder {
-    fn respond_to(self, request: &Request<'_>) -> response::Result<'static>;
 }
