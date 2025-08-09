@@ -5,11 +5,11 @@ use rocket::response::content::RawHtml;
 use rocket::{Build, Rocket};
 
 #[get("/<name>")]
-fn wiki<'r>(name: &str) -> wikify::wikify::Page {
+fn wiki<'r>(name: &str) -> wikify::WikiPage {
     if name == "shut" {
         exit(0);
     } else {
-        wikify::wikify::Page::new(String::from(name))
+        wikify::WikiPage::new(String::from(name))
     }
 }
 
