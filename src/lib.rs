@@ -4,7 +4,7 @@ use std::io::Cursor;
 use std::option;
 use std::process::exit;
 
-type PostInfo = option::Option<String>;
+pub type PostInfo = option::Option<String>;
 
 #[get("/<name>")]
 pub fn wiki<'r>(name: &str) -> WikiPage {
