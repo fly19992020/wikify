@@ -5,4 +5,5 @@ use rocket::{Build, Rocket};
 fn rocket() -> Rocket<Build>{
     rocket::build()
         .mount("/wiki", routes![wikify::wiki])
+        .mount("/wiki", routes![wikify::wiki_post])
 }

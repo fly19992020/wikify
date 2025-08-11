@@ -1,21 +1,30 @@
 use rocket::http::ContentType;
-use rocket::{get, response, Request, Response};
+use rocket::{get, post, response, Request, Response};
 use std::io::Cursor;
+use std::option;
 use std::process::exit;
+
+type PostInfo = option::Option<String>;
 
 #[get("/<name>")]
 pub fn wiki<'r>(name: &str) -> WikiPage {
     if name == "shut" {
         exit(0);
     } else {
-        WikiPage::new(String::from(name))
+        WikiPage::new(String::from(name), PostInfo::None)
     }
+}
+
+#[post("/<name>", data = "<data>")]
+pub fn wiki_post<'r>(name: &str, data: PostInfo) -> WikiPage {
+    WikiPage::new(String::from(name), data)
 }
 
 pub struct WikiPage {
     namespace: String,
     page_name: String,
     page_path: String,
+    post_data: PostInfo,
 }
 
 impl<'r> response::Responder<'r, 'static> for WikiPage {
@@ -31,11 +40,12 @@ impl<'r> response::Responder<'r, 'static> for WikiPage {
 }
 
 impl WikiPage {
-    pub fn new(name: String) -> WikiPage {
+    pub fn new(name: String, post_data: PostInfo) -> WikiPage {
         WikiPage {
             namespace: "".to_string(),
             page_name: name,
             page_path: "./wiki".to_string(),
+            post_data: post_data,
         }
     }
 
