@@ -2,21 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <style>#editor {
-        background-color: #000000;
-        width: 500px;
-        height: 200px;
-        color: #FFFFFF;
-        overflow: auto;
-        white-space: pre-wrap;
-    }</style>
+    <title>Editor (Single Form)</title>
+    <style>
+        textarea {
+            background-color: #000000;
+            color: #ffffff;
+            width: 500px;
+            height: 200px;
+            font-family: monospace;
+            resize: vertical;
+        }
+
+        input[type="url"] {
+            width: 500px;
+            box-sizing: border-box;
+        }
+    </style>
 </head>
 <body>
-    <div id="uri" contenteditable="true"></div>
-    <button onclick="on_fetch()">Fetch</button>
-    <div id="editor" contenteditable="true"></div>
-    <button onclick="on_put()">Commit</button>
-    <script src="editor.js"></script>
+
+<form id="editorForm">
+    <label>
+        <input
+                type="text"
+                name="uri"
+                placeholder="Enter resource URI"
+                required
+        />
+    </label>
+
+    <button type="submit" name="action" value="fetch">Fetch</button>
+    <button type="submit" name="action" value="commit">Commit</button>
+
+    <br><br>
+
+    <label>
+        <textarea name="content" spellcheck="false"></textarea>
+    </label>
+</form>
+
+<script src="editor.js"></script>
 </body>
 </html>

@@ -1,12 +1,29 @@
-function on_fetch() {
-    let uri = document.getElementById("uri").textContent;
-    let f = fetch(uri + "?source=true")
-        .then(response => response.text())
-        .then(s => {document.getElementById("editor").textContent = s;});
-}
+const form = document.getElementById("editorForm");
+const textarea = form.elements.content;
 
-function on_put() {
-    let uri = document.getElementById("uri").textContent;
-    let f = fetch(uri, {method: "PUT",
-        body: document.getElementById("editor").innerText.replace(/\r\n/g, "\n")});
-}
+form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const uri = form.elements.uri.value;
+    const action = event.submitter.value; // fetch 或 commit
+
+    if (action === "fetch") {
+        fetch(uri + "?source=true")
+            .then(response => response.text())
+            .then(text => {
+                textarea.value = text;
+            });
+    }
+
+    if (action === "commit") {
+        const body = textarea.value.replace(/\r\n/g, "\n");
+
+        fetch(uri, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "text/plain; charset=utf-8"
+            },
+            body: body
+        }).then(_ => alert("OK. "));
+    }
+});
