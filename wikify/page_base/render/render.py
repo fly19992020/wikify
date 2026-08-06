@@ -1,11 +1,15 @@
 import re
 from typing import List, Callable, Dict, Optional
+from . import link
 
 
 class Render:
     funcs: Dict[str, Callable[[List[str]], str]]
     def __init__(self):
-        self.funcs = {"server": (lambda _: "Wikify")}
+        self.funcs = {
+            "server": (lambda _: "Wikify"),
+            "link": link.link
+        }
 
     def render(self, c: str) -> str:
         res = re.sub(r"\{(?P<content>[^}]*)}", self.execute, c)
@@ -23,4 +27,4 @@ class Render:
 
 if __name__ == "__main__":
     r = Render()
-    print(r.render("hello{hello}{server}"))
+    print(r.render("hello {server} {link editor.html editor}"))
