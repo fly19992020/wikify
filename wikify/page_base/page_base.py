@@ -43,6 +43,15 @@ class PageBase:
                                               Home=Markup("<a href=\"/\">Home</a>"),
                                               Body=f
                                               )
+        elif self.get_type(name) == "text/wikify":
+            from .render import render
+            r = render.Render()
+            with open("templates/country.html") as t:
+                return render_template_string(t.read(),
+                                              Title="Wikify",
+                                              Home=Markup("<a href=\"/\">Home</a>"),
+                                              Body=Markup(r.render(escape(f)))
+                                              )
         return f
 
     def write_page(self, name: str, content: str):
