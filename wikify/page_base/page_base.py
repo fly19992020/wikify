@@ -50,14 +50,14 @@ class PageBase:
                 return render_template_string(t.read(),
                                               Title="Wikify",
                                               Home=Markup("<a href=\"/\">Home</a>"),
-                                              Body=Markup(r.render(escape(f)))
+                                              Body=Markup(r.render(f))
                                               )
         return f
 
     def write_page(self, name: str, content: str):
         s = self.get_source_path(name)
         if s is None:
-            self.create_page(name, "text/plain")
+            self.create_page(name, "text/wikify")
             self.write_page(name, content)
             return
         f = open(self.prefix + s, "w")
