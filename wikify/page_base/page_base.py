@@ -41,7 +41,8 @@ class PageBase:
                 return render_template_string(t.read(),
                                               Title="Wikify",
                                               Home=Markup("<a href=\"/\">Home</a>"),
-                                              Body=f
+                                              Body=f,
+                                              Source=True
                                               )
         elif self.get_type(name) == "text/wikify":
             from .render import render
@@ -50,7 +51,8 @@ class PageBase:
                 return render_template_string(t.read(),
                                               Title="Wikify",
                                               Home=Markup("<a href=\"/\">Home</a>"),
-                                              Body=Markup(r.render(f))
+                                              Body=Markup(r.render(f)),
+                                              Source=False
                                               )
         return f
 

@@ -9,6 +9,11 @@
         background-color: darkred;
         color: white;
     }
+    {% if Source %}
+    code {
+        white-space: pre-wrap;
+    }
+    {% endif %}
     </style>
 </head>
 <body>
@@ -16,6 +21,12 @@
         {{ Home }}
         <a href="editor.html">Editor</a>
     </div>
-    {{ Body }}
+    {% if Source %}
+    <code>
+{{ Body }}
+    </code>
+    {% else %}
+        {{ Body }}
+    {% endif %}
 </body>
 </html>
