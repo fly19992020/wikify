@@ -13,6 +13,16 @@ class Render:
 
     def render(self, c: str) -> str:
         res = re.sub(r"\{(?P<content>[^}]*)}", self.execute, c)
+        pattern = r'''(?mx)
+        ^(?:[ \t]*$\n)? 
+        (?P<paragraph>
+            [^\n]+
+            (?:\n(?![ \t]*$)
+                [^\n]+
+            )*
+        )
+        '''
+        res = re.sub(pattern, r"<p>\g<paragraph></p>", res)
         return res
 
     def execute(self, c: re.Match) -> Optional[str]:
