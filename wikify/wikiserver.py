@@ -11,6 +11,8 @@ setting: Setting = Setting()
 
 def create_app():
     app = Flask(__name__, template_folder="pages")
+    from .middlewares import middlewares
+    app.register_blueprint(middlewares)
     from .routes import routes
     app.register_blueprint(routes)
     importlib.import_module("wikify.autoload")

@@ -3,8 +3,9 @@ from urllib.parse import unquote
 
 import flask
 import markupsafe
-from flask import Blueprint, request, redirect, abort, send_from_directory
+from flask import Blueprint, request, redirect, abort, send_from_directory, g
 
+from .history_base import history_base
 from .page_base import page_base
 from .user_base import user_base
 
@@ -41,7 +42,7 @@ def login():
         r.set_cookie("name", data["name"])
         r.set_cookie("password", data["password"])
         r.status_code = 200
-        r.set_data()
+        r.set_data("")
         return r
     else:
         abort(401)
@@ -84,5 +85,8 @@ def save_page(page_name: str):
     if not request.data:
         abort(400)
 
-    base.write_page(page_name, markupsafe.escape(request.data.decode("utf-8")))
+    base.write_page(page_name, request.data.decode("utf-8"))
+
+    hb = history_base.HistoryBase(setting.database)
+    hb.add_history(g.get("username"), page_name)
     return "", 200
