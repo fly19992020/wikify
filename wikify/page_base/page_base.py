@@ -51,7 +51,7 @@ class PageBase:
                 return render_template_string(t.read(),
                                               Title="Wikify",
                                               Home=Markup("<a href=\"/\">Home</a>"),
-                                              Body=Markup(r.render(f)),
+                                              Body=Markup(r.render(escape(f))),
                                               Source=False
                                               )
         return f
@@ -73,11 +73,9 @@ class PageBase:
     def create_page(self, name, mime):
         self.cur.execute("SELECT MAX(id) FROM pages")
         c_id = self.cur.fetchall()[0][0] + 1
-        if mime == "text/plain":
+        if mime == "text/plain" or mime == "text/wikify":
             source = "{}.txt".format(c_id)
             open(source, "w").close()
-            print("INSERT INTO pages VALUES ({id}, '{source}', '{mime}', '{name}')"
-                  .format(id=c_id, source=source, mime=mime, name=name))
             self.cur.execute("INSERT INTO pages VALUES ({id}, '{source}', '{mime}', '{name}')"
                          .format(id=c_id, source=source, mime=mime, name=name))
             self.database_conn.commit()
