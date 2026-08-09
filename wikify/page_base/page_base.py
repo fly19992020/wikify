@@ -75,7 +75,7 @@ class PageBase:
         c_id = self.cur.fetchall()[0][0] + 1
         if mime == "text/plain" or mime == "text/wikify":
             source = "{}.txt".format(c_id)
-            open(source, "w").close()
+            open(self.prefix + source, "w").close()
             self.cur.execute("INSERT INTO pages VALUES ({id}, '{source}', '{mime}', '{name}')"
                          .format(id=c_id, source=source, mime=mime, name=name))
             self.database_conn.commit()
