@@ -1,6 +1,6 @@
 import re
 from typing import List, Callable, Dict, Optional
-from . import link
+from . import link, header
 
 
 class Render:
@@ -8,7 +8,13 @@ class Render:
     def __init__(self):
         self.funcs = {
             "server": (lambda _: "Wikify"),
-            "link": link.link
+            "link": link.link,
+            "h1": header.h1,
+            "h2": header.h2,
+            "h3": header.h3,
+            "h4": header.h4,
+            "h5": header.h5,
+            "h6": header.h6
         }
 
     def render(self, c: str) -> str:
@@ -27,10 +33,10 @@ class Render:
 
     def execute(self, c: re.Match) -> Optional[str]:
         c = c.group("content")
-        l = c.split()
-        name = l[0]
+        res = re.match(r"^(?P<name>[^\s]+)(\s+(?P<args>.*))?$", c)
+        name = res.group("name")
+        l = res.group("args").split("_")
         if name in self.funcs:
-            l.pop(0)
             return self.funcs[name](l)
         else:
             return None
