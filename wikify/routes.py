@@ -73,7 +73,7 @@ def page(page_name: str):
         content = base.get_source(page_name)
         return content, 200, {"Content-Type": "text/plain; charset=utf-8"}
 
-    html = base.get_page(page_name)
+    html = base.get_page(page_name, g.get("username"))
     return html, 200, {"Content-Type": "text/html; charset=utf-8"}
 
 

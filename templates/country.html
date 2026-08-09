@@ -9,6 +9,9 @@
         background-color: darkred;
         color: white;
     }
+    .username{
+        float: right;
+    }
     {% if Source %}
     code {
         white-space: pre-wrap;
@@ -20,6 +23,11 @@
     <div id="nav">
         {{ Home }}
         <a href="editor.html">Editor</a>
+        {% if Username == "Guest" %}
+            <span class="username"><a href="login.html">Login</a></span>
+        {% else %}
+            <span class="username">User: {{ Username }}</span>
+        {% endif %}
     </div>
     {% if Source %}
     <code>

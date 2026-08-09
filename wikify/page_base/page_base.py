@@ -34,27 +34,27 @@ class PageBase:
         self.cur.close()
         self.database_conn.close()
 
-    def get_page(self, name):
+    def get_page(self, name, user):
         f = self.get_source(name)
         if self.get_type(name) == "text/plain":
-            with open("templates/country.html") as t:
-                return render_template_string(t.read(),
-                                              Title="Wikify",
-                                              Home=Markup("<a href=\"/\">Home</a>"),
-                                              Body=f,
-                                              Source=True
-                                              )
+            body = f
+            source  = True
         elif self.get_type(name) == "text/wikify":
             from .render import render
             r = render.Render()
-            with open("templates/country.html") as t:
-                return render_template_string(t.read(),
-                                              Title="Wikify",
-                                              Home=Markup("<a href=\"/\">Home</a>"),
-                                              Body=Markup(r.render(escape(f))),
-                                              Source=False
-                                              )
-        return f
+            body = Markup(r.render(escape(f)))
+            source = False
+        else:
+            return f
+        with open("templates/country.html") as t:
+            return render_template_string(t.read(),
+                                          Title="Wikify",
+                                          Home=Markup("<a href=\"/\">Home</a>"),
+                                          Body=body,
+                                          Source=source,
+                                          Username=user
+                                          )
+
 
     def write_page(self, name: str, content: str):
         s = self.get_source_path(name)
