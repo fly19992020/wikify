@@ -7,7 +7,7 @@ from flask import Blueprint, request, redirect, abort, send_from_directory, g
 
 from .history_base import history_base
 from .page_base import page_base
-from .user_base import user_base
+from .user_base import user_base, priv_base
 
 routes = Blueprint("routes", __name__)
 
@@ -84,6 +84,10 @@ def save_page(page_name: str):
 
     if not request.data:
         abort(400)
+
+    pvb = priv_base.PrivBase(setting.database)
+    if not pvb.check_edit(g.get("username")):
+        abort(403)
 
     base.write_page(page_name, request.data.decode("utf-8"))
 
