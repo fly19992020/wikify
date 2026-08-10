@@ -24,7 +24,16 @@ form.addEventListener("submit", function (event) {
                 "Content-Type": "text/plain; charset=utf-8"
             },
             body: body
-        }).then(_ => alert("OK. "));
+        }).then(res => res.status)
+            .then(code => {
+                if (code == 403) {
+                    alert("You are refused to edit. ");
+                } else if(code == 200) {
+                    alert("OK. ");
+                } else {
+                    alert("There is an error. ")
+                }
+            });
     }
 });
 
