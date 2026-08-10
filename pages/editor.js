@@ -31,6 +31,7 @@ form.addEventListener("submit", function (event) {
 let queryString = window.location.search;
 let params = new URLSearchParams(queryString);
 if (params.get("page")) {
+    form.elements.uri.value = params.get("page");
     fetch(params.get("page") + "?source=true")
         .then(response => response.text())
         .then(text => {
