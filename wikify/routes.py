@@ -13,6 +13,10 @@ routes = Blueprint("routes", __name__)
 
 from .wikiserver import setting
 
+@routes.route("/R/<path:page_name>")
+def raw(page_name: str):
+    return send_from_directory(os.getcwd() + "/" + setting.prefix, page_name)
+
 @routes.route("/editor.js")
 def editor_js():
     return send_from_directory(os.getcwd() + "/" + setting.prefix, "editor.js")
