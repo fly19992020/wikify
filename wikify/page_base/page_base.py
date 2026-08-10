@@ -1,6 +1,6 @@
 import sqlite3
 
-from flask import render_template_string
+from flask import render_template_string, render_template
 from markupsafe import Markup, escape
 
 
@@ -38,7 +38,7 @@ class PageBase:
         f = self.get_source(name)
         if self.get_type(name) == "text/plain":
             body = f
-            source  = True
+            source = True
         elif self.get_type(name) == "text/wikify":
             from .render import render
             r = render.Render()
@@ -46,15 +46,14 @@ class PageBase:
             source = False
         else:
             return f
-        with open("templates/country.html") as t:
-            return render_template_string(t.read(),
-                                          Title="Wikify",
-                                          Home=Markup("<a href=\"/\">Home</a>"),
-                                          Body=body,
-                                          Source=source,
-                                          Username=user
-                                          )
-
+        return render_template("country.html",
+                               Title="Wikify",
+                               Home=Markup("<a href=\"/\">Home</a>"),
+                               Body=body,
+                               Source=source,
+                               Username=user,
+                               Views={"Edit": "editor.html?page=" + name}
+                               )
 
     def write_page(self, name: str, content: str):
         s = self.get_source_path(name)
@@ -77,5 +76,5 @@ class PageBase:
             source = "{}.txt".format(c_id)
             open(self.prefix + source, "w").close()
             self.cur.execute("INSERT INTO pages VALUES ({id}, '{source}', '{mime}', '{name}')"
-                         .format(id=c_id, source=source, mime=mime, name=name))
+                             .format(id=c_id, source=source, mime=mime, name=name))
             self.database_conn.commit()

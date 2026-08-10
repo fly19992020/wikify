@@ -10,7 +10,7 @@ class Setting:
 setting: Setting = Setting()
 
 def create_app():
-    app = Flask(__name__, template_folder="pages")
+    app = Flask(__name__)
     from .middlewares import middlewares
     app.register_blueprint(middlewares)
     from .routes import routes

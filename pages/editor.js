@@ -27,3 +27,13 @@ form.addEventListener("submit", function (event) {
         }).then(_ => alert("OK. "));
     }
 });
+
+let queryString = window.location.search;
+let params = new URLSearchParams(queryString);
+if (params.get("page")) {
+    fetch(params.get("page") + "?source=true")
+        .then(response => response.text())
+        .then(text => {
+            textarea.value = text;
+        });
+}

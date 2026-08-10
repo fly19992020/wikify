@@ -43,4 +43,4 @@ class Render:
 
 if __name__ == "__main__":
     r = Render()
-    print(r.render("hello {server} {link editor.html editor}"))
+    print(r.render("hello {server} {link editor.html_editor}"))

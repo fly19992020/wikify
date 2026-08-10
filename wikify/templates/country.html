@@ -9,6 +9,9 @@
         background-color: darkred;
         color: white;
     }
+    #nav a{
+        color: white;
+    }
     .username{
         float: right;
     }
@@ -21,13 +24,20 @@
 </head>
 <body>
     <div id="nav">
-        {{ Home }}
-        <a href="editor.html">Editor</a>
-        {% if Username == "Guest" %}
-            <span class="username"><a href="login.html">Login</a></span>
-        {% else %}
-            <span class="username">User: {{ Username }}</span>
-        {% endif %}
+        <div id="links">
+            {{ Home }}
+            <a href="editor.html">Editor</a>
+            {% if Username == "Guest" %}
+                <span class="username"><a href="login.html">Login</a></span>
+            {% else %}
+                <span class="username">User: {{ Username }}</span>
+            {% endif %}
+        </div>
+        <div id="views">
+            {% for name, link in Views.items() %}
+                <a href="{{ link }}">{{ name }}</a>
+            {% endfor %}
+        </div>
     </div>
     {% if Source %}
     <code>
