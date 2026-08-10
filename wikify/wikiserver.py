@@ -6,6 +6,7 @@ class Setting:
     port: int
     database: str
     prefix: str
+    register: bool
 
 setting: Setting = Setting()
 
