@@ -15,6 +15,12 @@
     .username{
         float: right;
     }
+    #searchBar{
+        opacity: 0.5;
+    }
+    #searchBar:focus{
+        opacity: 1;
+    }
     {% if Source %}
     code {
         white-space: pre-wrap;
@@ -37,6 +43,23 @@
             {% for name, link in Views.items() %}
                 <a href="{{ link }}">{{ name }}</a>
             {% endfor %}
+        </div>
+        <div id="search">
+            <form action="/Spec/Search">
+                <label>
+                    <input
+                            type="text"
+                            name="search"
+                            placeholder="Search for..."
+                            id="searchBar"
+                    >
+                </label>
+                <button
+                        type="submit"
+                        name="action"
+                        value="search"
+                >Go</button>
+            </form>
         </div>
     </div>
     {% if Source %}

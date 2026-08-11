@@ -3,7 +3,7 @@ from urllib.parse import unquote
 
 import flask
 import markupsafe
-from flask import Blueprint, request, redirect, abort, send_from_directory, g
+from flask import Blueprint, request, redirect, abort, send_from_directory, g, render_template
 
 from .history_base import history_base
 from .page_base import page_base
@@ -79,6 +79,28 @@ def page(page_name: str):
 
     html = base.get_page(page_name, g.get("username"))
     return html, 200, {"Content-Type": "text/html; charset=utf-8"}
+
+
+@routes.route("/Spec/<path:page_name>")
+def special_page(page_name: str):
+    if page_name == "Search":
+        pb = page_base.PageBase(setting.database, setting.prefix)
+        rs = pb.search_for(request.args.get("search"))
+        g.page = ""
+        for i in rs:
+            g.page += "<a href=\"/{}\">{}</a>".format(i[0], i[0])
+            g.page += "<br>"
+            print("page")
+    if g.get("page"):
+        return render_template("country.html",
+                               Title="Wikify",
+                               Home=markupsafe.Markup("<a href=\"/\">Home</a>"),
+                               Body=markupsafe.Markup(g.page),
+                               Source=False,
+                               Username=g.get("username"),
+                               Views={}
+                               )
+    abort(500)
 
 
 @routes.route("/<path:page_name>", methods=["PUT"])

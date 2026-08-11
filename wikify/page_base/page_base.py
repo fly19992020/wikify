@@ -78,3 +78,9 @@ class PageBase:
             self.cur.execute("INSERT INTO pages VALUES ({id}, '{source}', '{mime}', '{name}')"
                              .format(id=c_id, source=source, mime=mime, name=name))
             self.database_conn.commit()
+
+    def search_for(self, name):
+        self.cur.execute("SELECT name FROM pages WHERE name LIKE ?"
+                         , ["%"+name+"%"])
+        rows = self.cur.fetchall()
+        return rows
