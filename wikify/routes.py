@@ -86,11 +86,13 @@ def special_page(page_name: str):
     if page_name == "Search":
         pb = page_base.PageBase(setting.database, setting.prefix)
         rs = pb.search_for(request.args.get("search"))
-        g.page = ""
+        g.page = "<p>Searching for {}.</p>".format(request.args.get("search"))
         for i in rs:
             g.page += "<a href=\"/{}\">{}</a>".format(i[0], i[0])
             g.page += "<br>"
             print("page")
+        if not g.get("page"):
+            g.page += "<p>No matched results. </p>"
     if g.get("page"):
         return render_template("country.html",
                                Title="Wikify",
