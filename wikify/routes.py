@@ -81,18 +81,21 @@ def page(page_name: str):
     return html, 200, {"Content-Type": "text/html; charset=utf-8"}
 
 
-@routes.route("/Spec/<path:page_name>")
+@routes.route("/Spec/<path:page_name>", methods=["GET", "POST", "PUT"])
 def special_page(page_name: str):
     if page_name == "Search":
+        if request.method != "GET":
+            abort(405)
         pb = page_base.PageBase(setting.database, setting.prefix)
         rs = pb.search_for(request.args.get("search"))
-        g.page = "<p>Searching for {}.</p>".format(request.args.get("search"))
+        g.page = ""
         for i in rs:
             g.page += "<a href=\"/{}\">{}</a>".format(i[0], i[0])
             g.page += "<br>"
-            print("page")
         if not g.get("page"):
-            g.page += "<p>No matched results. </p>"
+            g.page = "<p>No matched results. </p>"
+        g.page = ("<p>Searching for {}.</p>".format(request.args.get("search"))
+                  + g.get("page"))
     if g.get("page"):
         return render_template("country.html",
                                Title="Wikify",
