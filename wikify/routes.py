@@ -96,6 +96,23 @@ def special_page(page_name: str):
             g.page = "<p>No matched results. </p>"
         g.page = ("<p>Searching for {}.</p>".format(request.args.get("search"))
                   + g.get("page"))
+    elif page_name == "Login":
+        if request.method == "POST":
+            data = request.form
+            ub = user_base.UserBase(setting.database)
+            if ub.check_password(data["username"], data["password"]):
+                r = flask.make_response()
+                r.set_cookie("name", data["username"])
+                r.set_cookie("password", data["password"])
+                r.status_code = 200
+                r.set_data("OK")
+                return r
+            else:
+                abort(401)
+        else:
+            g.page = ""
+            with open("pages/login2.html") as f:
+                g.page += f.read()
     if g.get("page"):
         return render_template("country.html",
                                Title="Wikify",
