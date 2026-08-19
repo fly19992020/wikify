@@ -4,6 +4,14 @@ from flask import render_template_string, render_template
 from markupsafe import Markup, escape
 
 
+class Page:
+    content: str
+    title: bool
+    def __init__(self, page, title):
+        self.title = title
+        self.content = page
+
+
 class PageBase:
     database_conn: sqlite3.Connection = None
     cur: sqlite3.Cursor = None
@@ -42,7 +50,10 @@ class PageBase:
         elif self.get_type(name) == "text/wikify":
             from .render import render
             r = render.Render()
-            body = Markup(r.render(escape(f)))
+            s = r.render(escape(f))
+            if s.title:
+                s.content = "Title" + s.content
+            body = Markup(s.content)
             source = False
         else:
             return f
